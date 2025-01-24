@@ -5,12 +5,16 @@ export default defineConfig({
     timeout: 30000,
     use: {
         headless: true, // Set false to see the browser
-        screenshot: 'only-on-failure',
-        video: 'retain-on-failure'
+        screenshot: 'on',
+        video: 'on'
     },
+    reporter: [
+        ['list'],  // Default console output
+        ['allure-playwright'],  // Add Allure reporter
+    ],
     projects: [
         { name: 'chromium', use: { browserName: 'chromium' } },
-        { name: 'firefox', use: { browserName: 'firefox' } },
-        { name: 'webkit', use: { browserName: 'webkit' } },
+        // { name: 'firefox', use: { browserName: 'firefox' } },
+        // { name: 'webkit', use: { browserName: 'webkit' } },
     ],
 });
