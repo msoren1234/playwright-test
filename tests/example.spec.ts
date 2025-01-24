@@ -8,6 +8,7 @@ test('homepage has title and links to intro page', async ({ page,homePage }) => 
     const title = await homePage.getTitle();
     expect(title).toMatch(/Playwright/);
 
+
     // Interact with the page
     await homePage.clickGetStarted();
 
