@@ -1,7 +1,10 @@
 name: "Run Playwright Tests on Demand"
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - master  # Runs only on push to the master branch
+  workflow_dispatch:  # Allows manual triggering from GitHub Actions UI
 
 jobs:
   run-playwright-tests:
