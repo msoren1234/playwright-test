@@ -33,6 +33,5 @@ jobs:
       - name: Send JSON report to webhook
         run: |
           curl -X POST -H "Content-Type: application/json" \
-#          -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" \
           --data @playwright-tests.json \
           https://httpbin.org/post
