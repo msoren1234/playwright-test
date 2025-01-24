@@ -10,7 +10,6 @@ test('homepage has title and links to intro page', async ({ page,homePage }) => 
 
 
 
-
     // Interact with the page
     await homePage.clickGetStarted();
 
