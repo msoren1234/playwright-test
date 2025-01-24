@@ -3,7 +3,7 @@ name: "Run Playwright Tests on Demand"
 on:
   push:
     branches:
-      - master  # Runs only on push to the master branch
+      - main  # Runs only on push to the master branch
   workflow_dispatch:  # Allows manual triggering from GitHub Actions UI
 
 jobs:
@@ -22,16 +22,21 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-       #  (Optional) If your tests require Playwright browsers each run:
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+      - name: Install Allure CLI
+        run: |
+          sudo apt update
+          sudo apt install -y allure
 
       - name: Clean Allure reports
         run: rm -rf allure-results allure-report
 
+       #  (Optional) If your tests require Playwright browsers each run:
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+
       - name: Run Playwright tests
         run: npx playwright test
-
 
 
       - name: Generate Allure report
