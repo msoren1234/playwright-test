@@ -18,13 +18,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Find Playwright tests and log them
+      - name: List Playwright tests in JSON format
         run: |
-          echo "Listing all Playwright tests in the project:"
-          npx playwright test --list | tee playwright-tests.log
+          echo "Generating Playwright test list in JSON format..."
+          npx playwright test --list --reporter=json > playwright-tests.json
+          cat playwright-tests.json  # Show JSON output in GitHub Actions log
 
-      - name: Upload test list as artifact
+      - name: Upload JSON test list as artifact
         uses: actions/upload-artifact@v3
         with:
           name: playwright-test-list
-          path: playwright-tests.log
+          path: playwright-tests.json
