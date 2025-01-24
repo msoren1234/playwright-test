@@ -18,20 +18,56 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: List Playwright tests in JSON format
-        run: |
-          echo "Generating Playwright test list in JSON format..."
-          npx playwright test --list --reporter=json > playwright-tests.json
-          cat playwright-tests.json  # Show JSON output in GitHub Actions log
+          - name: Generate Playwright tests JSON
+              run: |
+                echo "Generating Playwright test list in JSON format..."
+                npx playwright test --list --reporter=json > playwright-tests.json
+                cat playwright-tests.json  # Show JSON output in GitHub Actions log
 
-      - name: Upload JSON test list as artifact
+      - name: Upload JSON test list as artifact (optional)
         uses: actions/upload-artifact@v3
         with:
           name: playwright-test-list
           path: playwright-tests.json
 
-      - name: Send JSON report to webhook
+      - name: Extract test names into separate JSON
         run: |
+          node -e "
+            const fs = require('fs');
+            const data = JSON.parse(fs.readFileSync('playwright-tests.json', 'utf-8'));
+            // Each item in data.tests has properties like title, file, location, etc.
+            if (!data.tests) {
+              console.error('No tests found in the JSON output.');
+              process.exit(1);
+            }
+            // Extract titles
+            const testTitles = data.tests.map(t => t.title);
+            // Write them to a file as a JSON array
+            fs.writeFileSync('test-titles.json', JSON.stringify(testTitles, null, 2));
+          "
+          echo "Test titles extracted to test-titles.json"
+
+      - name: Send test titles to webhook
+        run: |
+          echo "Sending extracted test titles as JSON..."
           curl -X POST -H "Content-Type: application/json" \
-          --data @playwright-tests.json \
-          https://httpbin.org/post
+               --data @test-titles.json \
+               https://httpbin.org/post
+
+#      - name: List Playwright tests in JSON format
+#        run: |
+#          echo "Generating Playwright test list in JSON format..."
+#          npx playwright test --list --reporter=json > playwright-tests.json
+#          cat playwright-tests.json  # Show JSON output in GitHub Actions log
+#
+#      - name: Upload JSON test list as artifact
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: playwright-test-list
+#          path: playwright-tests.json
+#
+#      - name: Send JSON report to webhook
+#        run: |
+#          curl -X POST -H "Content-Type: application/json" \
+#          --data @playwright-tests.json \
+#          https://httpbin.org/post
