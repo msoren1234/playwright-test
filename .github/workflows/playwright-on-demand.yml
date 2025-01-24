@@ -19,15 +19,17 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+       #  (Optional) If your tests require Playwright browsers each run:
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
       - name: Clean Allure reports
         run: rm -rf allure-results allure-report
 
       - name: Run Playwright tests
         run: npx playwright test
 
-      # (Optional) If your tests require Playwright browsers each run:
-      #   - name: Install Playwright browsers
-      #  run: npx playwright install --with-deps
+
 
       - name: Generate Allure report
         run: allure generate allure-results --clean -o allure-report
