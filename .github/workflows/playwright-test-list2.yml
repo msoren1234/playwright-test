@@ -1,4 +1,4 @@
-name: List Playwright Tests
+name: List Playwright Tests 2
 
 on:
   push:
@@ -18,11 +18,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-          - name: Generate Playwright tests JSON
-              run: |
-                echo "Generating Playwright test list in JSON format..."
-                npx playwright test --list --reporter=json > playwright-tests.json
-                cat playwright-tests.json  # Show JSON output in GitHub Actions log
+      - name: Generate Playwright tests JSON
+        run: |
+          echo "Generating Playwright test list in JSON format..."
+          npx playwright test --list --reporter=json > playwright-tests.json
+          cat playwright-tests.json  # Show JSON output in GitHub Actions log
 
       - name: Upload JSON test list as artifact (optional)
         uses: actions/upload-artifact@v3
@@ -53,21 +53,3 @@ jobs:
           curl -X POST -H "Content-Type: application/json" \
                --data @test-titles.json \
                https://httpbin.org/post
-
-#      - name: List Playwright tests in JSON format
-#        run: |
-#          echo "Generating Playwright test list in JSON format..."
-#          npx playwright test --list --reporter=json > playwright-tests.json
-#          cat playwright-tests.json  # Show JSON output in GitHub Actions log
-#
-#      - name: Upload JSON test list as artifact
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: playwright-test-list
-#          path: playwright-tests.json
-#
-#      - name: Send JSON report to webhook
-#        run: |
-#          curl -X POST -H "Content-Type: application/json" \
-#          --data @playwright-tests.json \
-#          https://httpbin.org/post

@@ -1,0 +1,37 @@
+name: List Playwright Tests 1
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # Allows manual triggering from GitHub Actions UI
+
+jobs:
+  list-tests:
+#    if: github.event.pull_request.merged == true  # Run only if PR is merged
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: List Playwright tests in JSON format
+        run: |
+          echo "Generating Playwright test list in JSON format..."
+          npx playwright test --list --reporter=json > playwright-tests.json
+          cat playwright-tests.json  # Show JSON output in GitHub Actions log
+
+      - name: Upload JSON test list as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-test-list
+          path: playwright-tests.json
+
+      - name: Send JSON report to webhook
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+          --data @playwright-tests.json \
+          https://httpbin.org/post
