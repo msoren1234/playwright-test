@@ -8,7 +8,7 @@ on:
 
 jobs:
   list-tests:
-    if: github.event.pull_request.merged == true  # Run only if PR is merged
+#    if: github.event.pull_request.merged == true  # Run only if PR is merged
     runs-on: ubuntu-latest
 
     steps:
