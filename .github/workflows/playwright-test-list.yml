@@ -29,3 +29,15 @@ jobs:
         with:
           name: playwright-test-list
           path: playwright-tests.json
+
+      - name: Create GitHub Release and Upload JSON
+        uses: softprops/action-gh-release@v2
+        with:
+          files: playwright-tests.json
+          tag_name: "playwright-tests-${{ github.run_number }}"
+          release_name: "Playwright Test List - Run #${{ github.run_number }}"
+          body: "Playwright test list generated for this run."
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
